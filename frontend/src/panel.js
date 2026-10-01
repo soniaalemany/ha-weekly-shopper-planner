@@ -660,7 +660,7 @@ class WeeklyShopperPanel extends HTMLElement {
     if (!file) { this.setStatus('Selecciona un archivo JSON o Markdown.', true); return; }
     try {
       const r = await this.api.upload(file);
-      this.setStatus(`Importadas ${r.recipes} recetas, ${r.ingredients} ingredientes${r.plans != null ? `, ${r.plans} semanas y ${r.usages ?? 0} usos` : ''}.`);
+      this.setStatus(`Importadas ${r.recipes} recetas, ${r.ingredients} ingredientes${r.plans != null ? `, ${r.plans} semanas y ${r.usages ?? 0} usos` : ''}${r.skipped_entries ? ` (${r.skipped_entries} platos sobrantes descartados)` : ''}.`);
       await this.reloadAll();
     } catch (err) { this.setStatus(`No se pudo importar el archivo${err.message ? `: ${err.message}` : ''}.`, true); }
   }

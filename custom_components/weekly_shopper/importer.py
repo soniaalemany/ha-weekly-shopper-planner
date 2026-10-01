@@ -12,7 +12,7 @@ from datetime import UTC, date, datetime, time, timedelta
 from typing import Any
 
 from .const import NATIVE_FORMAT, NATIVE_VERSION, SOURCE_MANUAL
-from .logic import ingredient_key
+from .logic import compact_positions, ingredient_key
 from .models import (
     Ingredient,
     MealPlan,
@@ -365,7 +365,7 @@ def import_native(existing: dict[str, Recipe], payload: dict[str, Any]) -> Impor
         bundle.recipes[recipe.id] = recipe
         by_exported_id[exported_id] = recipe
 
-    new_weeks = 0
+    new_weeks = skipped = 0
     for source in source_plans:
         if not isinstance(source, dict):
             raise ImportDataError("Invalid meal plan")
@@ -393,14 +393,17 @@ def import_native(existing: dict[str, Recipe], payload: dict[str, Any]) -> Impor
                 )
             except (KeyError, TypeError, ValueError) as err:
                 raise ImportDataError("Invalid meal plan entry") from err
-            if not 0 <= entry.day <= 6 or entry.position not in (0, 1) or not entry.meal:
+            if not 0 <= entry.day <= 6 or entry.position < 0 or not entry.meal:
                 raise ImportDataError("Invalid meal plan entry")
             valid = {i.id for i in recipe.ingredients}
             entry.selected_ingredient_ids = [i for i in entry.selected_ingredient_ids if i in valid]
             entries.append(entry)
         if len({e.slot for e in entries}) != len(entries):
             raise ImportDataError("Duplicate recipe position in meal slot")
-        bundle.plans[monday.isoformat()] = entries
+        # la app original solo mostraba 2 platos por hueco; los sobrantes se descartan
+        compacted = compact_positions(entries)
+        skipped += len(entries) - len(compacted)
+        bundle.plans[monday.isoformat()] = compacted
         new_weeks += 1
 
     for source in source_lists:
@@ -430,5 +433,6 @@ def import_native(existing: dict[str, Recipe], payload: dict[str, Any]) -> Impor
         "ingredients": ingredient_count,
         "plans": new_weeks,
         "usages": len(bundle.usages),
+        "skipped_entries": skipped,
     }
     return bundle

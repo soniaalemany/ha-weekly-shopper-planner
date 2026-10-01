@@ -189,3 +189,16 @@ async def test_migration_hook(hass, hass_storage):
     data = WeeklyShopperData(hass)
     await data.async_load()
     assert data.recipes["r"].name == "Vieja"
+
+
+async def test_native_import_tolerates_extra_positions(setup_integration, data):
+    """El export de la app original puede traer un tercer plato (position 2): se descarta sin fallar."""
+    payload = {
+        "format": "weekly-shopper-planner", "version": 1,
+        "recipes": [{"id": "r", "name": "A", "ingredients": []}],
+        "meal_plans": [{"monday": WEEK, "entries": [
+            {"day_of_week": 2, "meal_type": "comida", "position": p, "recipe_id": "r"} for p in (0, 1, 2)]}],
+    }
+    counts = data.import_payload(payload)
+    assert counts["skipped_entries"] == 1
+    assert [e.slot for e in data.meal_plans[WEEK].entries] == [(2, "comida", 0), (2, "comida", 1)]
