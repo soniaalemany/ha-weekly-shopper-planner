@@ -1,0 +1,19 @@
+generate_shopping_list:
+  fields:
+    week:
+      required: false
+      selector:
+        date:
+    all_ingredients:
+      required: false
+      default: false
+      selector:
+        boolean:
+
+import_data:
+  fields:
+    path:
+      required: true
+      example: weekly-shopper-export.json
+      selector:
+        text:

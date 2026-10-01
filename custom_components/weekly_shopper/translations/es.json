@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Weekly Shopper Planner",
+        "description": "Configura el planificador semanal de comidas y la lista de la compra."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Solo se permite una instancia."
+    }
+  },
+  "services": {
+    "generate_shopping_list": {
+      "name": "Generar lista de la compra",
+      "description": "Reconstruye los artículos del planificador de la lista de una semana a partir de su menú (los manuales se conservan).",
+      "fields": {
+        "week": {"name": "Semana", "description": "Cualquier fecha de la semana (por defecto, la actual)."},
+        "all_ingredients": {"name": "Todos los ingredientes", "description": "Usa todos los ingredientes en lugar de solo los marcados."}
+      }
+    },
+    "import_data": {
+      "name": "Importar datos",
+      "description": "Importa un fichero JSON (nativo o externo) o Markdown ubicado en /config.",
+      "fields": {
+        "path": {"name": "Ruta", "description": "Ruta del fichero, absoluta o relativa al directorio de configuración."}
+      }
+    }
+  }
+}

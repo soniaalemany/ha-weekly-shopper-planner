@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Weekly Shopper Planner",
+        "description": "Set up the weekly meal planner and shopping list."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Only one instance is allowed."
+    }
+  },
+  "services": {
+    "generate_shopping_list": {
+      "name": "Generate shopping list",
+      "description": "Rebuilds the planner items of a week's shopping list from its meal plan (manual items are kept).",
+      "fields": {
+        "week": {"name": "Week", "description": "Any date of the week (defaults to the current week)."},
+        "all_ingredients": {"name": "All ingredients", "description": "Use every ingredient instead of only the selected ones."}
+      }
+    },
+    "import_data": {
+      "name": "Import data",
+      "description": "Imports a JSON (native or external) or Markdown file located in /config.",
+      "fields": {
+        "path": {"name": "Path", "description": "File path, absolute or relative to the config directory."}
+      }
+    }
+  }
+}

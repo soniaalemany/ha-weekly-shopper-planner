@@ -1,0 +1,5 @@
+# Instala también la versión de Home Assistant que fija el plugin de pytest
+pytest-homeassistant-custom-component
+# Paquete del frontend de HA: lo necesitan las dependencias frontend/panel_custom
+home-assistant-frontend
+ruff

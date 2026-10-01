@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+node_modules/
+# Instancia local de Home Assistant para desarrollo
+config/*
+!config/configuration.yaml
+!config/custom_components/
+config/custom_components/*
+!config/custom_components/.gitkeep
+.DS_Store

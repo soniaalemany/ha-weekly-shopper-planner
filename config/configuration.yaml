@@ -1,0 +1,7 @@
+# Configuración mínima de la instancia de desarrollo
+default_config:
+
+logger:
+  default: info
+  logs:
+    custom_components.weekly_shopper: debug
